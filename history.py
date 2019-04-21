@@ -46,6 +46,9 @@ class ShowHistory(object):
 	def doesIncludeDupes(self):
 		return self.includeDupes
 
+	def getRecentNum(self):
+		return self.recentNum
+
 	def changeRecentNum(self, newRecentNum):
 		self.recentNum = newRecentNum
 		self.update()

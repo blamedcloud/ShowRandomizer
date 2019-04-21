@@ -27,12 +27,13 @@ class Show(object):
 
 	def setPlayHistory(self, history):
 		assert isinstance(history, ShowHistory)
-		if len(history) >= self.getEpisodeCount():
+		if history.getRecentNum() >= self.getEpisodeCount():
 			# if there are no duplicates in the history,
 			# then you've played every episode.
 			# So, remove the oldest one from the history.
-			print("WARNING: History too long, removing oldest episode!")
+			print("WARNING: History too long, setting smaller recentNum!")
 			history.changeRecentNum(self.getEpisodeCount()-1)
+			print("History recentNum set to: " + str(history.getRecentNum()))
 		self.history = history
 		self._updatePlayed()
 

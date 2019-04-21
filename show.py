@@ -11,15 +11,28 @@ class Show(object):
 		self.seasons = {}
 		self.dir = showDir
 		self.history = None
+		self.episodeCount = 0
+		self._newSeason = False
 
 	def __len__(self):
 		return len(self.seasons)
 
 	def addSeason(self, seasonNum, weight, partOneEp = -1):
+		assert isinstance(weight, int)
+		if weight < 1:
+			print("WARNING: weights must be integers 1 or larger, setting to 1!")
+			weight = 1
 		self.seasons[seasonNum] = Season(self.dir, seasonNum, weight, partOneEp)
+		self._newSeason = True
 
 	def setPlayHistory(self, history):
 		assert isinstance(history, ShowHistory)
+		if len(history) >= self.getEpisodeCount():
+			# if there are no duplicates in the history,
+			# then you've played every episode.
+			# So, remove the oldest one from the history.
+			print("WARNING: History too long, removing oldest episode!")
+			history.changeRecentNum(self.getEpisodeCount()-1)
 		self.history = history
 		self._updatePlayed()
 
@@ -36,10 +49,25 @@ class Show(object):
 		for num, season in self.seasons.items():
 			season.setPlayed(self.history, True)
 
+	def _countEpisodes(self):
+		total = 0
+		for seasonNum in self.seasons:
+			total += len(self.seasons[seasonNum])
+		self.episodeCount = total
+
+	def getEpisodeCount(self):
+		if self.episodeCount == 0 or self._newSeason:
+			self._countEpisodes()
+			self._newSeason = False
+		return self.episodeCount
+
 	def getRandomSeason(self):
 		choices = []
 		for num, season in self.seasons.items():
 			choices += [num]*season.getEffectiveWeight()
+		if len(choices) == 0:
+			print("There are no valid seasons, maybe use less history?")
+			raise ValueError
 		return random.choice(choices)
 
 	def getFirstSeason(self):

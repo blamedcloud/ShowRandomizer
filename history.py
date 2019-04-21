@@ -10,9 +10,10 @@ def episodeStr2IntPair(seasonEpisodeStr):
 
 class ShowHistory(object):
 
-	def __init__(self, historyFile, recentNum):
+	def __init__(self, historyFile, recentNum, includeDupes = False):
 		self.recentNum = recentNum
 		self.historyFile = historyFile
+		self.includeDupes = includeDupes
 		self.recentlyWatched = []
 		self.update()
 
@@ -21,6 +22,8 @@ class ShowHistory(object):
 		self.recentlyWatched = []
 		with open(self.historyFile, 'r') as FILE:
 			for line in FILE:
+				if not self.includeDupes and line in history:
+					history.remove(line)
 				history.append(line)
 		if len(history) > 0:
 			if self.recentNum > 0:
@@ -36,6 +39,12 @@ class ShowHistory(object):
 
 	def __str__(self):
 		return str(self.recentlyWatched)
+
+	def setIncludeDupes(self, includeDupes):
+		self.includeDupes = includeDupes
+
+	def doesIncludeDupes(self):
+		return self.includeDupes
 
 	def changeRecentNum(self, newRecentNum):
 		self.recentNum = newRecentNum

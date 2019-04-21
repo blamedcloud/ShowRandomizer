@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import os
+import random
 from episode import Episode
 from history import ShowHistory, episodeStr2IntPair
 

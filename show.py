@@ -59,7 +59,6 @@ class Show(object):
 		playNext = False
 		if len(self.history) > 0:
 			mostRecent = self.history.getMostRecent()
-			print(mostRecent)
 			seasonNum = mostRecent[0]
 			episodeNum = mostRecent[1]
 			if self.seasons[seasonNum].getEpisodeObj(episodeNum).isPartOne():

@@ -18,11 +18,15 @@ class ShowHistory(object):
 
 	def update(self):
 		history = []
+		self.recentlyWatched = []
 		with open(self.historyFile, 'r') as FILE:
 			for line in FILE:
 				history.append(line)
 		if len(history) > 0:
-			self.recentlyWatched = [episodeStr2IntPair(ep) for ep in history[-1 * self.recentNum:]]
+			if self.recentNum > 0:
+				self.recentlyWatched = [episodeStr2IntPair(ep) for ep in history[-1 * self.recentNum:]]
+			elif self.recentNum == -1:
+				self.recentlyWatched = [episodeStr2IntPair(ep) for ep in history]
 
 	def getMostRecent(self):
 		return self.recentlyWatched[-1]

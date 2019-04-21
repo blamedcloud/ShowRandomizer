@@ -57,11 +57,26 @@ class Season(object):
 				return True
 		return False
 
-	def getValidEpisodeNums(self):
+	def countValidEpisodes(self, countPlayed = False):
+		valid = 0
+		for num, ep in self.episodes.items():
+			if countPlayed:
+				if not ep.isPartTwo():
+					valid += 1
+			else:
+				if not ep.isPlayed() and not ep.isPartTwo():
+					valid += 1
+		return valid
+
+	def getValidEpisodeNums(self, countPlayed = False):
 		valid = []
 		for num, ep in self.episodes.items():
-			if not ep.isPlayed() and not ep.isPartTwo():
-				valid.append(num)
+			if countPlayed:
+				if not ep.isPartTwo():
+					valid.append(num)
+			else:
+				if not ep.isPlayed() and not ep.isPartTwo():
+					valid.append(num)
 		return valid
 
 	def getFirstEpisodeInfo(self):

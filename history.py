@@ -32,7 +32,10 @@ class ShowHistory(object):
 				self.recentlyWatched = [episodeStr2IntPair(ep) for ep in history]
 
 	def getMostRecent(self):
-		return self.recentlyWatched[-1]
+		if len(self.recentlyWatched) > 0:
+			return self.recentlyWatched[-1]
+		else:
+			return (-1,-1)
 
 	def __len__(self):
 		return len(self.recentlyWatched)

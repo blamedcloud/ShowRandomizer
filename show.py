@@ -11,7 +11,8 @@ class Show(object):
 		self.seasons = {}
 		self.dir = showDir
 		self.history = None
-		self.episodeCount = 0
+		self.totalEpisodeCount = 0
+		self.validEpisodeCount = 0
 		self._newSeason = False
 
 	def __len__(self):
@@ -27,12 +28,12 @@ class Show(object):
 
 	def setPlayHistory(self, history):
 		assert isinstance(history, ShowHistory)
-		if history.getRecentNum() >= self.getEpisodeCount():
+		if history.getRecentNum() >= self.getValidEpisodeCount():
 			# if there are no duplicates in the history,
 			# then you've played every episode.
 			# So, remove the oldest one from the history.
 			print("WARNING: History too long, setting smaller recentNum!")
-			history.changeRecentNum(self.getEpisodeCount()-1)
+			history.changeRecentNum(self.getValidEpisodeCount()-1)
 			print("History recentNum set to: " + str(history.getRecentNum()))
 		self.history = history
 		self._updatePlayed()
@@ -52,15 +53,23 @@ class Show(object):
 
 	def _countEpisodes(self):
 		total = 0
+		valid = 0
 		for seasonNum in self.seasons:
 			total += len(self.seasons[seasonNum])
-		self.episodeCount = total
+			valid += self.seasons[seasonNum].countValidEpisodes(True)
+		self.totalEpisodeCount = total
+		self.validEpisodeCount = valid
+		self._newSeason = False
 
-	def getEpisodeCount(self):
-		if self.episodeCount == 0 or self._newSeason:
+	def getTotalEpisodeCount(self):
+		if self.totalEpisodeCount <= 0 or self._newSeason:
 			self._countEpisodes()
-			self._newSeason = False
-		return self.episodeCount
+		return self.totalEpisodeCount
+
+	def getValidEpisodeCount(self):
+		if self.validEpisodeCount <= 0 or self._newSeason:
+			self._countEpisodes()
+		return self.validEpisodeCount
 
 	def getRandomSeason(self):
 		choices = []

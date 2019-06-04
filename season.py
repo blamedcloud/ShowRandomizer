@@ -15,6 +15,7 @@ class Season(object):
 		self.seasonDir = getSeasonDirFromNum(self.seasonNum)
 		self.seasonPath = os.path.join(showDir, self.seasonDir)
 		self.episodes = {}
+		self.simpleWeights = False
 
 		episodeNames = os.listdir(self.seasonPath)
 		for episode in episodeNames:
@@ -38,6 +39,9 @@ class Season(object):
 
 	def getSeasonNum(self):
 		return self.seasonNum
+
+	def setWeightingSimple(self, isSimple):
+		self.simpleWeights = isSimple
 
 	def __str__(self):
 		return "seasonNum=" + str(self.seasonNum) + "; weight=" + str(self.weight) + "; " + str(self.episodes)
@@ -99,10 +103,14 @@ class Season(object):
 		return self.getEpisodeInfo(epNum)
 
 	def getEffectiveWeight(self):
-		if self.hasValidEpisode():
-			return self.weight
+		if self.simpleWeights:
+			if self.hasValidEpisode():
+				return self.weight
+			else:
+				return 0
 		else:
-			return 0
+			countValid = self.countValidEpisodes(False)
+			return int(self.weight * countValid * 100 / len(self.episodes))
 
 	def hasEpisodeByNum(self, num):
 		return num in self.episodes

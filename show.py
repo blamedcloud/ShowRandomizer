@@ -71,6 +71,10 @@ class Show(object):
 			self._countEpisodes()
 		return self.validEpisodeCount
 
+	def setSeasonsWeightingSimple(self, isSimple):
+		for num, season in self.seasons.items():
+			season.setWeightingSimple(isSimple)
+
 	def getRandomSeason(self):
 		choices = []
 		for num, season in self.seasons.items():

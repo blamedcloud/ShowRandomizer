@@ -1,0 +1,18 @@
+In order to use the play_show.play method, your vlc will need to be configured
+so that it closes after it finishes playing it's playlist.
+
+In order to configure this, follow the following steps (or google around for
+the right setting if this doesn't work exactly):
+
+1. open vlc
+2. op the top bar, go to
+    Tools -> Preferences
+3. in the bottom-left corner of the window that pops up, select the 'All' button
+under 'Show settings'
+4. in the left menu, scroll until you find the 'Playlist' option, and select it.
+5. ensure that the 'Play and exit' checkbox is checked.
+6. hit the 'Save' button in the bottom-right corner
+
+The important thing here is that the 'Play and exit' option is turned on. If the
+menu navigation above doesn't match up exactly to your vlc version, then look
+around for that option or google how to turn it on.

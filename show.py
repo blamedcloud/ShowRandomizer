@@ -106,10 +106,9 @@ class Show(object):
         self._playEpisode(epInfo, printEp)
 
     def playRandomOrPartTwo(self, printEp = False, vlcExe = None):
-        assert self.history is not None
         self.setVlcExe(vlcExe)
         playNext = False
-        if len(self.history) > 0:
+        if self.history is not None and len(self.history) > 0:
             mostRecent = self.history.getMostRecent()
             seasonNum = mostRecent[0]
             episodeNum = mostRecent[1]
@@ -121,14 +120,13 @@ class Show(object):
             self.playRandomEpisode(printEp)
 
     def playNextEpisode(self, printEp = False, vlcExe = None):
-        assert self.history is not None
         self.setVlcExe(vlcExe)
-        if len(self.history) > 0:
+        epInfo = None
+        if self.history is not None and len(self.history) > 0:
             mostRecent = self.history.getMostRecent()
             seasonNum = mostRecent[0]
             episodeNum = mostRecent[1]
             thisSeason = self.seasons[seasonNum]
-            epInfo = None
             if thisSeason.hasEpisodeByNum(episodeNum+1):
                 epInfo = thisSeason.getEpisodeInfo(episodeNum+1)
             else:
@@ -141,7 +139,6 @@ class Show(object):
             epInfo = self.getFirstSeason().getFirstEpisodeInfo()
         self._playEpisode(epInfo, printEp)
 
-    # assumes the given seasonNum and epNum are 1-indexed
     def playEpisode(self, seasonNum, epNum, printEp = False, vlcExe = None):
         assert self.hasSeasonByNum(seasonNum)
         assert self.seasons[seasonNum].hasEpisodeByNum(epNum)

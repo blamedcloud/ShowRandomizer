@@ -46,6 +46,9 @@ class Show(object):
         if vlcExe is not None:
             self.vlcExe = vlcExe
 
+    def hasVlcExe(self):
+        return self.vlcExe is not None
+
     def hasSeasonByNum(self, seasonNum):
         return seasonNum in self.seasons
 
@@ -138,6 +141,17 @@ class Show(object):
         else:
             epInfo = self.getFirstSeason().getFirstEpisodeInfo()
         self._playEpisode(epInfo, printEp)
+
+    def replayLastEpisode(self, printEp = False, vlcExe = None):
+        self.setVlcExe(vlcExe)
+        if self.history is not None and len(self.history) > 0:
+            mostRecent = self.history.getMostRecent()
+            seasonNum = mostRecent[0]
+            episodeNum = mostRecent[1]
+            self.playEpisode(seasonNum, episodeNum, printEp)
+        else:
+            epInfo = self.getFirstSeason().getFirstEpisodeInfo()
+            self._playEpisode(epInfo, printEp)
 
     def playEpisode(self, seasonNum, epNum, printEp = False, vlcExe = None):
         assert self.hasSeasonByNum(seasonNum)
